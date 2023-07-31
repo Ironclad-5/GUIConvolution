@@ -68,7 +68,6 @@ def greyscaleimage(image):
             greyScaleValue = ((0.299 * RGBTuple[0]) + (0.587 * RGBTuple[1]) + (0.114 * RGBTuple[2]))
             pixels[i, j] = (int(greyScaleValue), int(greyScaleValue), int(greyScaleValue))
 
-
     return img
 
 
@@ -78,18 +77,14 @@ def imageInversion(image):
     height, width = img.size
     for i in range(0, height):
         for j in range(0, width):
-            RGBTuple = img.getpixel((i,j))
+            RGBTuple = img.getpixel((i, j))
             red = 255 - RGBTuple[0]
             green = 255 - RGBTuple[1]
             blue = 255 - RGBTuple[2]
 
-            pixels[i,j] = (red, green, blue)
-            
+            pixels[i, j] = (red, green, blue)
 
     return img
 
-def gaussianBlur(image):
-    img = Image.open(image)
-    pixels = img.load()
-    height, width = img.load()
-    
+
+
