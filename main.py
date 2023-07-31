@@ -1,5 +1,6 @@
 import ttkbootstrap as ttk
 import tkinter as TK
+import threading
 from tkinter import filedialog
 from tkinter.messagebox import showerror, askyesno
 from tkinter import colorchooser
@@ -26,7 +27,8 @@ class app(TK.Tk):
         filtercombobox = ttk.Combobox(self.leftFrame, values=self.image_filters, width=15)
         filtercombobox.pack(pady=10, padx=5)
 
-        filtercombobox.bind("<<ComboboxSelected>>", lambda event: self.applyfilter(filtercombobox.get()))
+        #Addded threading so that the GUI doesn't hang while the 'extremely' fast image processing occurs
+        filtercombobox.bind("<<ComboboxSelected>>", lambda event: threading.Thread(self.applyfilter(filtercombobox.get())))
 
         self.image_icon = ttk.PhotoImage(file='saveicon.png').subsample(12, 12)
         self.loadicon = ttk.PhotoImage(file='loadicon-removebg-preview.png').subsample(12, 12)
@@ -42,14 +44,21 @@ class app(TK.Tk):
         # self.canvas.create_image(0, 0, anchor='nw', image=)
 
     def applyfilter(self, grabbedfilter):
+        global filepath, photo_image
+
         if grabbedfilter == self.image_filters[0]:
-            print("Sobel Edge Detector")
+            img = ImageProcessing.EdgeDetector(filepath)
         elif grabbedfilter == self.image_filters[1]:
-            print("Color Inversion")
+            img = ImageProcessing.imageInversion(filepath)
         elif grabbedfilter == self.image_filters[2]:
-            print("Black and White")
-        else:
-            print("Gaussian Blur")
+            img = ImageProcessing.greyscaleimage(filepath)
+
+        new_width = int((self.WIDTH / 2))
+        final_image = img.resize((new_width, self.HEIGHT), Image.LANCZOS)
+
+        photo_image = ImageTk.PhotoImage(final_image)
+        self.canvas.create_image(0, 0, anchor="nw", image=photo_image)
+
 
 
     def loadImage(self):
