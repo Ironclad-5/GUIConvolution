@@ -5,7 +5,9 @@ from tkinter.messagebox import showerror, askyesno
 from tkinter import colorchooser
 from PIL import Image, ImageOps, ImageTk, ImageFilter, ImageGrab
 
+import ImageProcessing
 
+filepath = ""
 class app(TK.Tk):
     def __init__(self):
         self.WIDTH = 1280
@@ -29,10 +31,10 @@ class app(TK.Tk):
         self.image_icon = ttk.PhotoImage(file='saveicon.png').subsample(12, 12)
         self.loadicon = ttk.PhotoImage(file='loadicon-removebg-preview.png').subsample(12, 12)
 
-        savebutton = ttk.Button(self.leftFrame, image=self.image_icon, bootstyle="light", command=self.print2COnsole)
+        savebutton = ttk.Button(self.leftFrame, image=self.image_icon, bootstyle="light", command=self.print2Console)
         savebutton.pack(pady=10)
 
-        loadbutton = ttk.Button(self.leftFrame, image=self.loadicon, bootstyle="light", command=self.print2head)
+        loadbutton = ttk.Button(self.leftFrame, image=self.loadicon, bootstyle="light", command=self.loadImage)
         loadbutton.pack(pady=10)
 
        #Write the code to show the image within the GUI
@@ -49,8 +51,26 @@ class app(TK.Tk):
         else:
             print("Gaussian Blur")
 
+
+    def loadImage(self):
+        global filepath
+        filepath = filedialog.askopenfilename(title="Open Image File", filetypes = [("Image Files", "*.jpg;*.jpeg;*.png;*.gif;*.bmp")])
+        if filepath:
+            global image, photo_image
+            image = Image.open(filepath)
+            new_width = int((self.WIDTH / 2))
+            image = image.resize((new_width, self.HEIGHT), Image.LANCZOS)
+
+            image = ImageTk.PhotoImage(image)
+            self.canvas.create_image(0, 0, anchor="nw", image=image)
+
+
     def print2Console(self):
         print("Testing")
+
+
+
+
 
 
 
