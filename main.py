@@ -1,6 +1,7 @@
 import ttkbootstrap as ttk
 import tkinter as TK
 import threading
+from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showerror, askyesno
 from tkinter import colorchooser
@@ -47,6 +48,10 @@ class app(TK.Tk):
         loadbutton.pack(pady=10)
 
     # Write the code to show the image within the GUI
+    
+    root = Tk()
+    canvas = Canvas(root, width = 750, height =  560)
+    canvas.pack()
 
     # self.canvas.create_image(0, 0, anchor='nw', image=)
 
